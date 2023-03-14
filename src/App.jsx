@@ -9,6 +9,8 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react';
+
+import { ethers } from "ethers";
 import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import { useState } from 'react';
 
@@ -36,9 +38,23 @@ import { useState } from 'react';
 //  setStatus(walletResponse.status);
 //  setWallet(walletResponse.address);
 //};
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+
+
 
 
 function App() {
+
+  async function connectWallet() {
+    if(!window.ethereum){
+      alert("MetaMask is not installed!")
+    } 
+
+    const accounts = await provider.send('eth_requestAccounts', []);
+    setAccount(accounts[0]);
+  }
+
   const [userAddress, setUserAddress] = useState('');
   const [results, setResults] = useState([]);
   const [hasQueried, setHasQueried] = useState(false);
@@ -53,11 +69,28 @@ function App() {
     };
 
     const alchemy = new Alchemy(config);
-    const data = await alchemy.core.getTokenBalances(userAddress);
 
+    //const addr = document.getElementById('inputAddress').value;
+    const isAddress = ethers.utils.isAddress(userAddress);
+    const isENS = await alchemy.core.resolveName(userAddress);
+
+    if (!isAddress && isENS == null){
+      alert("Please type a valid address!");
+    } else {
+      const data = await alchemy.core.getTokenBalances(userAddress);
+      setResults(data);
+    }
+  
+    //const data = await alchemy.core.getTokenBalances(userAddress);
+
+    //setResults(data);
+    
+    const data = await alchemy.core.getTokenBalances(userAddress);
     setResults(data);
 
     const tokenDataPromises = [];
+
+
 
     for (let i = 0; i < data.tokenBalances.length; i++) {
       const tokenData = alchemy.core.getTokenMetadata(
@@ -80,6 +113,11 @@ function App() {
           <Heading mb={0} fontSize={36}>
             ERC-20 Token Indexer
           </Heading>
+
+          <Button variant="outline" onClick={connectWallet} size="sm" colorScheme="teal">
+    Connect Wallet
+</Button>
+
           <Text>
             Plug in an address and this website will return all of its ERC-20
             token balances!
@@ -141,6 +179,7 @@ function App() {
         )}
       </Flex>
     </Box>
+
   );
 }
 
