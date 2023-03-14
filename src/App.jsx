@@ -12,15 +12,43 @@ import {
 import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import { useState } from 'react';
 
+//import { connectWallet } from "./interact.js";
+
+//State variables
+//const [walletAddress, setWallet] = useState("");
+//const [status, setStatus] = useState("");
+//const [name, setName] = useState("");
+//const [description, setDescription] = useState("");
+//const [url, setURL] = useState("");
+
+//import * as dotenv from 'dotenv' 
+//dotenv.config()
+//import express from 'express'
+
+
+//require('dotenv').config();
+//const url = process.env.GOERLI_URL;
+//const url = process.env.REACT_APP_GOERLI_URL;
+//const apikey = {process.env.REACT_APP_API_KEY};
+
+//const connectWalletPressed = async () => {
+//  const walletResponse = await connectWallet();
+//  setStatus(walletResponse.status);
+//  setWallet(walletResponse.address);
+//};
+
+
 function App() {
   const [userAddress, setUserAddress] = useState('');
   const [results, setResults] = useState([]);
   const [hasQueried, setHasQueried] = useState(false);
   const [tokenDataObjects, setTokenDataObjects] = useState([]);
 
+  //console.log(VITA_API_KEY);
+  
   async function getTokenBalance() {
     const config = {
-      apiKey: '<-- COPY-PASTE YOUR ALCHEMY API KEY HERE -->',
+      apiKey: '4OwtEJoKoCLjm0T5myGkeMtrgd6-DJcL' ,
       network: Network.ETH_MAINNET,
     };
 
@@ -76,7 +104,7 @@ function App() {
           bgColor="white"
           fontSize={24}
         />
-        <Button fontSize={20} onClick={getTokenBalance} mt={36} bgColor="blue">
+        <Button fontSize={20} onClick={getTokenBalance} mt={36} bgColor="Silver">
           Check ERC-20 Token Balances
         </Button>
 
@@ -88,8 +116,8 @@ function App() {
               return (
                 <Flex
                   flexDir={'column'}
-                  color="white"
-                  bg="blue"
+                  color="black"
+                  bg="none"
                   w={'20vw'}
                   key={e.id}
                 >
